@@ -22,12 +22,13 @@ class Bot
     puts "Initiating handshake with server..."
     say "USER #{nick} 0 * #{nick}"
     say "NICK #{nick}"
-    say "JOIN #bbtest"
-
-    puts "Successfully connected, now listening in channel"
 
     until @socket.eof? do
+      #msg = Message.new(@socket.gets)
       msg = @socket.gets
+      if msg.include?(' 376 ')
+        say "JOIN #bbtest"
+      end
       puts "SERVER <<< #{msg}"
     end
   end
