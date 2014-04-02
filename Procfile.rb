@@ -1,2 +1,0 @@
-
-bot: ruby BotBot.rb
