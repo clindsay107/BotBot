@@ -11,7 +11,6 @@ class Bot
     @server = server
     @port = port
     @chan = chan
-    @socket = TCPSocket.open(server, port)
   end
 
   def say(str)
@@ -19,6 +18,7 @@ class Bot
   end
 
   def run
+    @socket = TCPSocket.open(self.server, self.port)
     puts "Initiating handshake with server..."
     say "USER #{nick} 0 * #{nick}"
     say "NICK #{nick}"
