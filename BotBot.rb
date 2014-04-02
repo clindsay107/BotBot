@@ -19,9 +19,12 @@ class Bot
   end
 
   def run
+    puts "Initiating handshake with server..."
     say "USER #{nick} 0 * #{nick}"
     say "NICK #{nick}"
     say "JOIN #bbtest"
+
+    puts "Successfully connected, now listening in channel"
 
     until @socket.eof? do
       msg = @socket.gets
