@@ -19,7 +19,7 @@ end
 #This is for channel/query messages sent from another user
 class PrivateMessage < Message
 
-  attr_reader :parts, :user_string, :chan, :message, :nickname, :hostname
+  attr_reader :parts, :user_string, :chan, :text, :nickname, :hostname
 
   def initialize(str)
     @str = str
@@ -33,7 +33,7 @@ class PrivateMessage < Message
     @user_string = self.parts[0][1..-1]
     parse_user_string()
     @chan = self.parts[2][1..-1]
-    @message = self.parts[3..-1].join(" ")[1..-1]
+    @text = self.parts[3..-1].join(" ")[1..-1]
   end
 
   def parse_user_string
@@ -42,7 +42,7 @@ class PrivateMessage < Message
   end
 
   def stringify
-    self.message
+    self.text
   end
 
 end

@@ -2,6 +2,7 @@
 
 require 'socket'
 require './lib/message'
+require './lib/texttrigger'
 
 class Bot
   attr_reader :nick, :server, :port, :chan, :verbose
@@ -19,6 +20,10 @@ class Bot
     @socket.puts(str + "\n")
   end
 
+  def say_to_user(user, str)
+    say("PRIVMSG #{user} :#{str}")
+  end
+
   #Open a TCPSocket and connect, joining the channel when appropriate.
   #Turn on verbose logging if declared in init (helpful for debugging)
   def run
@@ -30,7 +35,6 @@ class Bot
     until @socket.eof? do
       msg = @socket.gets
       msg = (msg.split(" ")[1] == "PRIVMSG" ? PrivateMessage.new(msg) : Message.new(msg))
-      #msg = Message.new(@socket.gets)
 
       #keep alive
       if msg.parts[0] == "PING"
@@ -43,6 +47,7 @@ class Bot
           say "JOIN ##{self.chan}"
         when "366"
           puts "[INFO]>> Successfully joined ##{self.chan}"
+        else
         end
       end
       #output to terminal window whatever the server is giving our socket\
