@@ -28,15 +28,14 @@ class Bot
     say "NICK #{nick}"
 
     until @socket.eof? do
-      msg = Message.new(@socket.gets)
+      msg = @socket.gets
+      msg = (msg.split(" ")[1] == "PRIVMSG" ? PrivateMessage.new(msg) : Message.new(msg))
+      #msg = Message.new(@socket.gets)
 
       #keep alive
       if msg.parts[0] == "PING"
         say "PONG :pingis"
-      end
-
-      #respond to/log the connection codes
-      if @verbose
+      else
         case msg.parts[1]
         when "001"
           puts "[INFO]>> Processing connection to server..."
@@ -44,11 +43,10 @@ class Bot
           say "JOIN ##{self.chan}"
         when "366"
           puts "[INFO]>> Successfully joined ##{self.chan}"
-        else
         end
-        #output to terminal window whatever the server is giving our socket
-        puts "[SERVER]<< #{msg.stringify}"
       end
+      #output to terminal window whatever the server is giving our socket\
+      puts "[SERVER]<< #{msg.stringify}" if @verbose
     end
   end
 
