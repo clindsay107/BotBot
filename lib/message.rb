@@ -1,5 +1,7 @@
 class Message
 
+  attr_reader :parts, :str
+
   MSG_TYPES = [
     :notice,
     :mode,
@@ -10,9 +12,14 @@ class Message
     :other
   ]
 
-  def initialize(str, verbose = false)
+  def initialize(str)
+    @str = str
     @parts = str.split(" ")
-    p @parts
+  end
+
+  #return a human-readable-message
+  def stringify
+    self.str
   end
 
 end
