@@ -1,12 +1,12 @@
 #general messages received from the server over our TCPSocket
 class Message
 
-  attr_reader :parts, :str
+  attr_reader :parts, :str, :type
 
   def initialize(str)
     @str = str
     @parts = str.split(" ")
-    @msg_type = @parts[1]
+    @type = @parts[1]
   end
 
   #return a human-readable-message
@@ -19,12 +19,12 @@ end
 #This is for channel/query messages sent from another user
 class PrivateMessage < Message
 
-  attr_reader :parts, :user_string, :chan, :text, :nickname, :hostname
+  attr_reader :parts, :type, :user_string, :chan, :text, :nickname, :hostname
 
   def initialize(str)
     @str = str
     @parts = str.split(" ")
-    @msg_type = "PRIVMSG"
+    @type = "PRIVMSG"
     parse()
   end
 
