@@ -16,12 +16,11 @@ class ResponseTrigger < Trigger
   #response for a trigger, unless it is the last remaining response for that
   #trigger, in which case remove the trigger from the DB entirely
 
-  attr_reader :response
+  attr_reader :response, :matcher
 
-  def initialize(trigger, response, implicit = false)
+  def initialize(trigger, response)
     build_matcher(trigger)
     @response = response
-    @implicit = implicit
   end
 
   def build_matcher(trigger)
@@ -33,8 +32,18 @@ class ResponseTrigger < Trigger
     end
   end
 
+  #if we want to use a method as our response and trigger it at a later time,
+  #procify it on creation and then call the proc, sending that method's return
+  #value as our response
+  def send_response
+    if self.response.class.name == "Proc"
+      return self.response.call
+    end
+    self.response
+  end
+
   def matched?(str)
-    !@matcher.match(str).nil?
+    !self.matcher.match(str).nil?
   end
 
 end
