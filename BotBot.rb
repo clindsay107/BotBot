@@ -3,6 +3,8 @@
 require 'socket'
 require 'logger'
 require 'singleton'
+require 'pg'
+require_relative 'config'
 Dir[File.join(".", "lib/*.rb")].each { |f| require f }
 
 class Bot
@@ -20,6 +22,13 @@ class Bot
     log_file = File.open("tmp/debug.log", "a")
     $log = Logger.new(MultiWriter.new(STDOUT, log_file))
     $log.level = (silent ? Logger::WARN : Logger::INFO)
+
+    # @conn = PG::Connection.open(dbname: 'botbot')
+    # @conn.exec("CREATE TABLE quotes (
+    #   id bigserial primary key, 
+    #   nickname varchar(25) NOT NULL, 
+    #   message text NOT NULL, 
+    #   date_added timestamp NOT NULL)")
   end
 
   def say(str)
@@ -56,8 +65,10 @@ class Bot
   end
 
   #hold last N messages in memory, this can be changed but should be kept
-  #at a reasonable number, depending on hardware
-  def add_to_cache(msg)
+  #at a reasonable number, depending on hardware. Also store in DB.
+  def store_message(msg)
+    # @conn.prepare("insert_quote", "INSERT INTO quotes (nickname, message, date_added) VALUES ($1, $2)")
+    # @conn.exec_prepared("insert_quote", [msg.nickname, msg.text, Time.now])
     return if msg.text.split[0] == $bot.nick
     if @msg_cache.length >= 500
       @msg_cache.shift
@@ -81,7 +92,7 @@ class Bot
       msg = (msg.split(" ")[1] == "PRIVMSG" ? PrivateMessage.new(msg) : Message.new(msg))
 
       if msg.type == "PRIVMSG"
-        add_to_cache(msg)
+        store_message(msg)
         @loaded_triggers.each do |name, trigger|
           if trigger.matched?(msg.text)
             say_to_chan(self.chan, trigger.send_response)
@@ -128,7 +139,7 @@ class MultiWriter
   end
 end
 
-$bot = Bot.new("hirugabotto", "irc.rizon.net", 6667, "lifting")
+$bot = Bot.new("hirugabotto1", "irc.rizon.net", 6667, "bbtest")
 markov = Markov.new($bot.nick, Proc.new{Markov.markov_response})
 $bot.load_trigger(markov)
 $bot.run()
