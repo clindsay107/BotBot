@@ -4,7 +4,7 @@ class Markov < ResponseTrigger
 
 	def self.markov_response
 		cache = $bot.msg_cache
-		return "no messages in cache" if cache.length <= 1
+		return if cache.length <= 1
 		if cache.length < 5
 			msg = cache.sample.text
 			$log.info("Cache size under 30, returning #{msg}")
@@ -21,7 +21,7 @@ class Markov < ResponseTrigger
 			chain = find_random(cache, clamp)
 		else
 			candidate = cache.last.text.split
-			chain = candidate[1..Random.rand(1..candidate.length/clamp)]
+			chain = candidate[1..Random.rand((candidate.length/clamp).abs+1)]
 		end
 
 		while chain.length < max_length do
@@ -43,15 +43,6 @@ class Markov < ResponseTrigger
 	#get a random string according to our clamp size
 	def self.find_random(cache, clamp)
 		candidate = cache.sample.text.split
-		# if candidate.length < clamp
-		# 	find_random(cache, clamp)
-		# end
-
-		# candidate = candidate[1..-1]
-
-		# if candidate == []
-		# 	find_random(cache, clamp)
-		# end
-		candidate[1..Random.rand(1..candidate.length/clamp)]
+		candidate[1..Random.rand((candidate.length/clamp).abs+1)]
 	end
 end
