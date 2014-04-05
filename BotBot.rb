@@ -17,7 +17,7 @@ class Bot
     @loaded_triggers = {}
     @msg_cache = []
 
-    log_file = File.open("log/debug.log", "a")
+    log_file = File.open("log/debug.log", "w")
     $log = Logger.new(MultiWriter.new(STDOUT, log_file))
     $log.level = (silent ? Logger::WARN : Logger::INFO)
   end
