@@ -58,6 +58,7 @@ class Bot
   #hold last N messages in memory, this can be changed but should be kept
   #at a reasonable number, depending on hardware
   def add_to_cache(msg)
+    return if msg.text.split[0] == $bot.nick
     if @msg_cache.length >= 500
       @msg_cache.shift
       @msg_cache << msg
@@ -127,7 +128,7 @@ class MultiWriter
   end
 end
 
-$bot = Bot.new("hirugabotto", "irc.rizon.net", 6667, "pleb")
+$bot = Bot.new("hirugabotto", "irc.rizon.net", 6667, "lifting")
 markov = Markov.new($bot.nick, Proc.new{Markov.markov_response})
 $bot.load_trigger(markov)
 $bot.run()
