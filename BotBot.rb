@@ -139,7 +139,7 @@ class MultiWriter
   end
 end
 
-$bot = Bot.new("hirugabotto1", "irc.rizon.net", 6667, "bbtest")
+$bot = Bot.new("hirugabotto", "irc.rizon.net", 6667, "lifting")
 markov = Markov.new($bot.nick, Proc.new{Markov.markov_response})
 $bot.load_trigger(markov)
 $bot.run()
