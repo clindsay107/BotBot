@@ -1,0 +1,1 @@
+This is a temporary file. You can delete it or leave it alone, it doesn't matter. It is only necessary so that the /log subdir will be included :)
