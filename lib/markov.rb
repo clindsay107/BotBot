@@ -30,7 +30,7 @@ class Markov < ResponseTrigger
 
 			(cache.length/2).times do 
 				if candidate.include?(last_word)
-					chain.concat(candidate[candidate.index(last_word)..-1])
+					chain.concat(candidate[candidate.index(last_word)+1..-1])
 					break
 				end
 				candidate = find_random(cache, clamp)
