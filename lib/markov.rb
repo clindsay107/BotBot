@@ -21,7 +21,7 @@ class Markov < ResponseTrigger
 			chain = find_random(cache, clamp)
 		else
 			candidate = cache.last.text.split
-			chain = candidate[1..Random.rand((candidate.length/clamp).abs+1)]
+			chain = candidate[0..Random.rand((candidate.length/clamp).abs+1)]
 		end
 
 		while chain.length < max_length do
