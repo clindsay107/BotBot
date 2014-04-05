@@ -9,13 +9,13 @@ module Settings
 	#but some IRC servers may use something else. SSL is not implemented yet
 	#but support is coming soon!
 	#
-	NICKNAME = "HirugaBotto1"
+	NICKNAME = "HirugaBotto"
 
 	SERVER = "irc.rizon.net"
 
 	PORT = 6667
 
-	CHAN = "bbtest"
+	CHAN = "lifting"
 
 	#
 	#This is a collection of triggers that will load on startup.
