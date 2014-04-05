@@ -16,12 +16,12 @@ class Markov < ResponseTrigger
 	#build a random markov chain from the cache 
 	def self.build_chain(cache)
 		clamp = Random.rand(1..3)
-		max_length = Random.rand(8..15)
+		max_length = Random.rand(5..15)
 		if cache.last.text == $bot.nick
 			chain = find_random(cache, clamp)
 		else
 			candidate = cache.last.text.split
-			chain = candidate[1..candidate.length/2]
+			chain = candidate[1..candidate.length/clamp]
 		end
 
 		while chain.length < max_length do
@@ -30,7 +30,7 @@ class Markov < ResponseTrigger
 
 			(cache.length/2).times do 
 				if candidate.include?(last_word)
-					chain.concat(candidate[1..-1])
+					chain.concat(candidate[candidate.index(last_word)..-1])
 					break
 				end
 				candidate = find_random(cache, clamp)
@@ -42,7 +42,7 @@ class Markov < ResponseTrigger
 
 	#get a random string according to our clamp size
 	def self.find_random(cache, clamp)
-		candidate = cache.sample.text.split[1..-1]
+		candidate = cache.sample.text.split
 		# if candidate.length < clamp
 		# 	find_random(cache, clamp)
 		# end
@@ -52,6 +52,6 @@ class Markov < ResponseTrigger
 		# if candidate == []
 		# 	find_random(cache, clamp)
 		# end
-		candidate
+		candidate[1..candidate.length/clamp]
 	end
 end
