@@ -55,6 +55,17 @@ class Bot
     say_to_chan(self.chan, loaded_list)
   end
 
+  #hold last N messages in memory, this can be changed but should be kept
+  #at a reasonable number, depending on hardware
+  def add_to_cache(msg)
+    if @msg_cache.length >= 500
+      @msg_cache.shift
+      @msg_cache << msg
+    else
+      @msg_cache << msg
+    end
+  end
+
 
   #Open a TCPSocket and connect, joining the channel when appropriate.
   #Turn on verbose logging if declared in init (helpful for debugging)
@@ -69,7 +80,7 @@ class Bot
       msg = (msg.split(" ")[1] == "PRIVMSG" ? PrivateMessage.new(msg) : Message.new(msg))
 
       if msg.type == "PRIVMSG"
-        @msg_cache << msg
+        add_to_cache(msg)
         @loaded_triggers.each do |name, trigger|
           if trigger.matched?(msg.text)
             say_to_chan(self.chan, trigger.send_response)
@@ -116,7 +127,7 @@ class MultiWriter
   end
 end
 
-$bot = Bot.new("hirugabotto", "irc.rizon.net", 6667, "bbtest")
+$bot = Bot.new("hirugabotto", "irc.rizon.net", 6667, "pleb")
 markov = Markov.new($bot.nick, Proc.new{Markov.markov_response})
 $bot.load_trigger(markov)
 $bot.run()
