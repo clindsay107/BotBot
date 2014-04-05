@@ -5,57 +5,44 @@ class Markov < ResponseTrigger
 	def self.markov_response
 		cache = $bot.msg_cache
 		return if cache.length <= 1
-		# if cache.length < 5
-		# 	msg = cache.sample.text
-		# 	$log.info("Cache size under 30, returning #{msg}")
-		# 	return msg
-		# end
+		if cache.length < 10
+			msg = cache.sample.text
+			$log.info("Cache size under 10, returning #{msg}")
+			return msg
+		end
 		build_chain(cache)
 	end
 
 
-	#build a random markov chain from the cache 
+	#build a random markov chain from the cache, using 1-4 string.
+	#try to find ones that match on the last work of the latest link,
+	#otherwise use a random string.
 	def self.build_chain(cache)
-	# 	t_cache = [
-	# 	"this is a test",
-	# 	"more test strings",
-	# 	"whats up my dude",
-	# 	"hey brother",
-	# 	"hello",
-	# 	"just doing the thing",
-	# 	"typing on computers",
-	# 	"we want them to string along",
-	# 	"a very nice day today",
-	# 	"yes I agree",
-	# 	"solid test strings bro",
-	# 	"coffee is good",
-	# 	"mmmm coffee",
-	# 	"its noon",
-	# 	"lets watch LCS now bb"
-	# ]
-	# 	cache = t_cache
+		links = Random.rand(1..4)
 
-		clamp = Random.rand(1..3)
-		max_length = Random.rand(5..15)
 		if cache.last == $bot.nick
-			chain = cache.sample.split
+			chain = cache.sample.text.split
 		else
-			chain = cache.last.split
+			chain = cache.last.text.split
 		end
 
-		while chain.length < max_length do
+		while links > 0 do
 			last_word = chain.last
-			candidate = cache.sample.split
+			candidate = cache.sample.text.split
 
 			(cache.length/2).times do 
 				if candidate.include?(last_word)
 					chain.concat(candidate[candidate.index(last_word)+1..-1])
+					links -= 1
 					break
 				end
-				candidate = cache.sample.split
+				candidate = cache.sample.text.split
 			end
-			chain.concat(cache.sample.split)
+
+			chain.concat(cache.sample.text.split)
+			links -= 1
 		end
+		$log.info("Chain built, returning #{chain.join(" ")}")
 		chain.join(" ")
 	end
 end

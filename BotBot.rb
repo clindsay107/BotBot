@@ -4,20 +4,22 @@ require 'socket'
 require 'logger'
 require 'singleton'
 require 'pg'
-require_relative 'config'
+require_relative 'settings'
 Dir[File.join(".", "lib/*.rb")].each { |f| require f }
 
 class Bot
+  include Settings
   attr_reader :nick, :server, :port, :chan, :verbose, :msg_cache
   attr_accessor :socket, :loaded_triggers
 
-  def initialize(nick, server, port, chan, silent = false)
-    @nick = nick
-    @server = server
-    @port = port
-    @chan = chan
+  def initialize(silent = false)
+    @nick = Settings::NICKNAME
+    @server = Settings::SERVER
+    @port = Settings::PORT
+    @chan = Settings::CHAN
     @loaded_triggers = {}
     @msg_cache = []
+    @in_chan = false
 
     log_file = File.open("tmp/debug.log", "a")
     $log = Logger.new(MultiWriter.new(STDOUT, log_file))
@@ -47,14 +49,14 @@ class Bot
     return if @loaded_triggers[trigger.name]
     @loaded_triggers[trigger.name] = trigger
     $log.info("Loaded #{trigger.name}")
-    #say_to_chan(self.chan, "#{trigger.name} successfully unloaded!")
+    say_to_chan(self.chan, "#{trigger.name} successfully unloaded!") if @in_chan
   end
 
   def unload_trigger(trigger)
     return if @loaded_triggers[triggername].nil?
     @loaded_triggers.delete(trigger.name)
     $log.info("Unloaded #{trigger.name}")
-    #say_to_chan(self.chan, "#{trigger.name} successfully loaded!")
+    say_to_chan(self.chan, "#{trigger.name} successfully loaded!") if @in_chan
   end
 
   def list_loaded_triggers
@@ -82,6 +84,7 @@ class Bot
   #Open a TCPSocket and connect, joining the channel when appropriate.
   #Turn on verbose logging if declared in init (helpful for debugging)
   def run
+    Settings::DEFAULT_TRIGGERS.each_value{|v| load_trigger(v)}
     @socket = TCPSocket.open(self.server, self.port)
     $log.info("Initiating handshake with server...")
     say "USER #{nick} 0 * #{nick}"
@@ -111,6 +114,7 @@ class Bot
           $log.info("Connected to server, joining channel...")
           say "JOIN ##{self.chan}"
         when "366"
+          @in_chan = true
           $log.info("Successfully joined ##{self.chan}")
         else
         end
@@ -139,7 +143,7 @@ class MultiWriter
   end
 end
 
-$bot = Bot.new("hirugabotto", "irc.rizon.net", 6667, "lifting")
-markov = Markov.new($bot.nick, Proc.new{Markov.markov_response})
-$bot.load_trigger(markov)
+$bot = Bot.new()
+# markov = Markov.new($bot.nick, Proc.new{Markov.markov_response})
+# $bot.load_trigger(markov)
 $bot.run()
