@@ -4,6 +4,8 @@ One bot to rule them all...
 
 Please note: RubyBot is now deprecated. Please upgrade to BotBot :^)
 
+![botto](botto.png)
+
 ##Running locally
 
 BotBot can be run from localhost. Simple clone the repo, edit the ```$bot``` params
