@@ -14,7 +14,7 @@ class Greeting < ResponseTrigger
 	#pluck a random "greeting" string from cache, or create one
 	def self.build_user_response(user)
 		candidates = []
-		
+
 		$bot.msg_cache.each do |line|
 			line = line.text
 			if CANNED_RESPONSES.any?{ |r| line.downcase[r.downcase] }

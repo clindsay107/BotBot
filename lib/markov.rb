@@ -42,7 +42,7 @@ class Markov < ResponseTrigger
 			links -= 1
 		end
 		$log.info("Chain built, returning #{chain.join(" ")}")
-		chain.join(" ").gsub($bot.nick, "")
+		chain.join(" ").gsub($bot.nick, "").strip
 	end
 
 	def self.get_candidate

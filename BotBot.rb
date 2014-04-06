@@ -18,6 +18,7 @@ class Bot
     @server = Settings::SERVER
     @port = Settings::PORT
     @chan = Settings::CHAN
+    @last_resp = Time.now
     @loaded_triggers = {}
     @msg_cache = []
     @in_chan = false
@@ -84,8 +85,9 @@ class Bot
   #search through all triggers and send response if we get a match
   def fire_triggers(msg)
     @loaded_triggers.each do |name, trigger|
-      if trigger.matched?(msg.text)
+      if trigger.matched?(msg.text) && (Time.now - @last_resp).to_i > Settings::DELAY
         say_to_chan(self.chan, trigger.send_response)
+        @last_resp = Time.now
         return #only fire one trigger per match, no spam!
       end
     end

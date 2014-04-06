@@ -8,13 +8,20 @@ module Settings
 	#but some IRC servers may use something else. SSL is not implemented yet
 	#but support is coming soon!
 	#
-	NICKNAME = "HirugaBotto"
+	NICKNAME = "HirugaBotto1"
 
 	SERVER = "irc.rizon.net"
 
 	PORT = 6667
 
-	CHAN = "lifting"
+	CHAN = "bbtest"
+
+	#
+	#This is the minimum amount of time that must pass before another response
+	#can be triggered from BotBot. It is intended to prevent spamming and overloading.
+	#It must be a positive integer representing seconds. Set to 0 for no delay.
+	#
+	DELAY = 2
 
 	#
 	#This is a collection of triggers that will load on startup.

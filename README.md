@@ -22,3 +22,8 @@ in your local terminal, create a Heroku project, ```git add```, ```git commit```
 ```heroku  ps:scale bot=1``` to spin up a dyno for BotBot (his Procfile is already
 properly configured for this). He should join your channel soon after. If you run into
 problems, run ```heroku logs``` or try to deploy locally and debug.
+
+Running on Heroku allows you to test new features locally in dev and then ```git push``` 
+to Heroku once you have finished your feature. Heroku will automagically terminate the
+current instance of BotBot, fetch the new repo and updated code and re-launch him - you
+don't have to do anything!
