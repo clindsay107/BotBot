@@ -72,7 +72,7 @@ class Bot
   def store_message(msg)
     # @conn.prepare("insert_quote", "INSERT INTO quotes (nickname, message, date_added) VALUES ($1, $2)")
     # @conn.exec_prepared("insert_quote", [msg.nickname, msg.text, Time.now])
-    return if msg.text.split[0] == $bot.nick
+    return if msg.text == $bot.nick
     if @msg_cache.length >= 500
       @msg_cache.shift
       @msg_cache << msg

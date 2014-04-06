@@ -14,7 +14,7 @@ module Settings
 
 	PORT = 6667
 
-	CHAN = "pleb"
+	CHAN = "lifting"
 
 	#
 	#This is a collection of triggers that will load on startup.
