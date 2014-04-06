@@ -9,6 +9,7 @@ Dir[File.join(".", "lib/*.rb")].each { |f| require f }
 
 class Bot
   include Settings
+  
   attr_reader :nick, :server, :port, :chan, :verbose, :msg_cache
   attr_accessor :socket, :loaded_triggers
 
@@ -80,6 +81,16 @@ class Bot
     end
   end
 
+  #search through all triggers and send response if we get a match
+  def fire_triggers(msg)
+    @loaded_triggers.each do |name, trigger|
+      if trigger.matched?(msg.text)
+        say_to_chan(self.chan, trigger.send_response)
+        return #only fire one trigger per match, no spam!
+      end
+    end
+  end
+
 
   #Open a TCPSocket and connect, joining the channel when appropriate.
   #Turn on verbose logging if declared in init (helpful for debugging)
@@ -96,11 +107,7 @@ class Bot
 
       if msg.type == "PRIVMSG"
         store_message(msg)
-        @loaded_triggers.each do |name, trigger|
-          if trigger.matched?(msg.text)
-            say_to_chan(self.chan, trigger.send_response)
-          end
-        end
+        fire_triggers(msg)
       end
 
       #keep alive
@@ -143,7 +150,6 @@ class MultiWriter
   end
 end
 
+
 $bot = Bot.new()
-# markov = Markov.new($bot.nick, Proc.new{Markov.markov_response})
-# $bot.load_trigger(markov)
 $bot.run()

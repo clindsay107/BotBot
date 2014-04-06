@@ -16,11 +16,12 @@ class ResponseTrigger < Trigger
   #response for a trigger, unless it is the last remaining response for that
   #trigger, in which case remove the trigger from the DB entirely
 
-  attr_reader :response, :matcher
+  attr_reader :response, :matcher, :implicit
 
-  def initialize(trigger, response)
+  def initialize(trigger, response, implicit = false)
     build_matcher(trigger)
     @response = response
+    @implicit = implicit
   end
 
   def build_matcher(trigger)
@@ -42,7 +43,9 @@ class ResponseTrigger < Trigger
     self.response
   end
 
+  #BotBot uses ! syntax. Feel free to change this to anything you wish.
   def matched?(str)
+    return false if (!self.implicit && str[1] != "!")
     !self.matcher.match(str).nil?
   end
 
