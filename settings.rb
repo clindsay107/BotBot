@@ -9,10 +9,10 @@ module Settings
 	#but support is coming soon! Note: channel name does not need # prefix
 	#
 
-	NICKNAME = "HirugaBotto1"
+	NICKNAME = "HirugaBotto"
 	SERVER = "irc.rizon.net"
 	PORT = 6667
-	CHAN = "bbtest"
+	CHAN = "lifting"
 
 	#
 	#This is the minimum amount of time that must pass before another response
@@ -20,7 +20,7 @@ module Settings
 	#It must be a positive integer representing seconds. Set to 0 for no delay.
 	#
 
-	DELAY = 0
+	DELAY = 2
 
 	#
 	#This is a collection of triggers that you can dynamically add/remove
