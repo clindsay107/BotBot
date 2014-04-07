@@ -9,7 +9,7 @@ Dir[File.join(".", "lib/*.rb")].each { |f| require f }
 
 class Bot
   include Settings
-  
+
   attr_reader :nick, :server, :port, :chan, :verbose, :msg_cache
   attr_accessor :socket, :loaded_triggers, :last_match
 
@@ -29,9 +29,9 @@ class Bot
 
     # @conn = PG::Connection.open(dbname: 'botbot')
     # @conn.exec("CREATE TABLE quotes (
-    #   id bigserial primary key, 
-    #   nickname varchar(25) NOT NULL, 
-    #   message text NOT NULL, 
+    #   id bigserial primary key,
+    #   nickname varchar(25) NOT NULL,
+    #   message text NOT NULL,
     #   date_added timestamp NOT NULL)")
   end
 
@@ -49,7 +49,17 @@ class Bot
       $log.warn("Not in channel, but tried to send text to #{@chan}")
       return
     end
-    say("PRIVMSG ##{chan} :#{str.strip}")
+    say("PRIVMSG ##{chan} :#{str.strip}") if str
+  end
+
+  def join_chan(chan)
+    $log.info("Joining ##{chan}")
+    say("JOIN ##{chan}")
+  end
+
+  def leave_chan(chan)
+    $log.info("Leaving ##{chan}")
+    say("PART ##{chan}")
   end
 
   def load_trigger(name, defaults = false)
@@ -137,7 +147,7 @@ class Bot
          $log.info("Processing connection to server...")
         when "376"
           $log.info("Connected to server, joining channel...")
-          say "JOIN ##{self.chan}"
+          join_chan(self.chan)
         when "366"
           @in_chan = true
           $log.info("Successfully joined ##{self.chan}")

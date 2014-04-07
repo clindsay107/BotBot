@@ -9,10 +9,10 @@ module Settings
 	#but support is coming soon! Note: channel name does not need # prefix
 	#
 
-	NICKNAME = "HirugaBotto1"
+	NICKNAME = "HirugaBotto"
 	SERVER = "irc.rizon.net"
 	PORT = 6667
-	CHAN = "bbtest"
+	CHAN = "lifting"
 
 	#
 	#This is the minimum amount of time that must pass before another response
@@ -45,6 +45,8 @@ module Settings
 	DEFAULT_TRIGGERS = {
 		loaded_triggers: ResponseTrigger.new("!loaded", Proc.new{$bot.list_loaded_triggers}),
 		load_trigger: ResponseTrigger.new("!load\\s(\\w+)", Proc.new{$bot.load_trigger($bot.last_match[1])}),
-		unload_trigger: ResponseTrigger.new("!unload\\s(\\w+)", Proc.new{$bot.unload_trigger($bot.last_match[1])})
+		unload_trigger: ResponseTrigger.new("!unload\\s(\\w+)", Proc.new{$bot.unload_trigger($bot.last_match[1])}),
+    join_chan: ResponseTrigger.new("!join\\s(\\w+)", Proc.new{$bot.join_chan($bot.last_match[1])}),
+    leave_chan: ResponseTrigger.new("!leave\\s(\\w+)", Proc.new{$bot.leave_chan($bot.last_match[1])})
 	}
 end
