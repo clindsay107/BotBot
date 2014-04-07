@@ -4,6 +4,14 @@ class Trigger
     "trigger.#{self.class.name}"
   end
 
+  def self.find_loadable(str)
+    #
+  end
+
+  def self.find_unloadble(str)
+    #
+  end
+
 end
 
 #An object that will respond to a given trigger regular expression
@@ -24,12 +32,14 @@ class ResponseTrigger < Trigger
     @implicit = implicit
   end
 
+  #When building a matcher from a string, you MUST double escape backward slashes
+  #or they will be ignored!
   def build_matcher(trigger)
     if trigger[0] == "/" && trigger[-1] == "/"
       trigger = trigger[1..-2]
       @matcher = /#{trigger}/
     else
-      @matcher = /(^|\s)#{trigger}($|\s)/
+      @matcher = (self.implicit ? /(^|\s)#{trigger}($|\s)/ : /^#{trigger}($|\s)/)
     end
   end
 
@@ -45,8 +55,15 @@ class ResponseTrigger < Trigger
 
   #BotBot uses ! syntax. Feel free to change this to anything you wish.
   def matched?(str)
-    return false if (!self.implicit && str[1] != "!")
-    !self.matcher.match(str).nil?
+    # puts ">>> #{self.matcher.source}"
+    # puts ">>> #{str}"
+    return false if (!self.implicit && str[0] != "!")
+    if (self.matcher =~ str) != nil
+      $bot.last_match = $~
+      $log.info("/#{self.matcher.source}/ matched #{str}")
+      return true
+    end
+    false
   end
 
 end

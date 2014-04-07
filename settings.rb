@@ -6,14 +6,12 @@ module Settings
 	#These are some default settings for BotBot. Feel free to change
 	#his nickname, irc server address, etc. Port number is 6667 by default,
 	#but some IRC servers may use something else. SSL is not implemented yet
-	#but support is coming soon!
+	#but support is coming soon! Note: channel name does not need # prefix
 	#
+
 	NICKNAME = "HirugaBotto1"
-
 	SERVER = "irc.rizon.net"
-
 	PORT = 6667
-
 	CHAN = "bbtest"
 
 	#
@@ -21,7 +19,21 @@ module Settings
 	#can be triggered from BotBot. It is intended to prevent spamming and overloading.
 	#It must be a positive integer representing seconds. Set to 0 for no delay.
 	#
-	DELAY = 2
+
+	DELAY = 0
+
+	#
+	#This is a collection of triggers that you can dynamically add/remove
+	#to BotBot via the !load|unload <trigger name> command. If they are not available
+	#in this hash, they are not available for dynamic loading/unloading. They are
+	#not necessary for the core functionality of BotBot and can be removed without fear
+	#of consequence
+	#
+
+	TRIGGERS = {
+		markov: Markov.new(NICKNAME, Proc.new{Markov.markov_response}, true),
+		hi: ResponseTrigger.new("hi", Proc.new{Greeting.build_user_response($bot.msg_cache.last.nickname)}, true)
+	}
 
 	#
 	#This is a collection of triggers that will load on startup.
@@ -29,9 +41,10 @@ module Settings
 	#each time the script is run. It is generally a good idea to keep
 	#most of these unless you find its behavior uneeded or irritating.
 	#
+
 	DEFAULT_TRIGGERS = {
-		markov: Markov.new(NICKNAME, Proc.new{Markov.markov_response}, true),
-		hi: ResponseTrigger.new("hi", Proc.new{Greeting.build_user_response($bot.msg_cache.last.nickname)}, true)
-		
+		loaded_triggers: ResponseTrigger.new("!loaded", Proc.new{$bot.list_loaded_triggers}),
+		load_trigger: ResponseTrigger.new("!load\\s(\\w+)", Proc.new{$bot.load_trigger($bot.last_match[1])}),
+		unload_trigger: ResponseTrigger.new("!unload\\s(\\w+)", Proc.new{$bot.unload_trigger($bot.last_match[1])})
 	}
 end
