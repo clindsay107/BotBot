@@ -1,3 +1,10 @@
 source 'https://rubygems.org'
 gem 'sinatra', '1.1.0'
-gem 'pg'
+
+group :development do
+	gem 'sqlite3'
+end
+
+group :production do
+	gem 'pg'
+end

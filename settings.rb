@@ -9,10 +9,10 @@ module Settings
 	#but support is coming soon! Note: channel name does not need # prefix
 	#
 
-	NICKNAME = "HirugaBotto"
+	NICKNAME = "HirugaBotto1"
 	SERVER = "irc.rizon.net"
 	PORT = 6667
-	CHAN = "lifting"
+	CHAN = "bbtest"
 
 	#
 	#This is the minimum amount of time that must pass before another response

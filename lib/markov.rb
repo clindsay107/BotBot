@@ -24,21 +24,27 @@ class Markov < ResponseTrigger
 
 		while links > 0 do
 			$log.info("Link size at #{links}")
-			last_word = chain.last
+			#last_word = chain.last
 			candidate = get_candidate
 
-			(@cache.length).times do 
-				if candidate.include?(last_word)
-					clamp = Random.rand(candidate.length) -1
-					chain.concat(candidate[candidate.index(last_word)+1..clamp])
-					links -= 1
-					break
-				end
+			# (@cache.length).times do 
+			# 	if candidate.include?(last_word)
+			# 		clamp = Random.rand(candidate.length) -1
+			# 		chain.concat(candidate[candidate.index(last_word)+1..clamp])
+			# 		links -= 1
+			# 		break
+			# 	end
+			# 	candidate = get_candidate
+			# end
+			temp = get_matching_candidate(candidate, chain.last)
+
+			if temp
+				chain.concat(temp)
+			else
 				candidate = get_candidate
+				clamp = Random.rand(candidate.length) - 1
+				chain.concat(candidate[0..clamp])
 			end
-			candidate = get_candidate
-			clamp = Random.rand(candidate.length) -1
-			chain.concat(candidate[0..clamp])
 			links -= 1
 		end
 		$log.info("Chain built, returning #{chain.join(" ")}")
@@ -50,10 +56,24 @@ class Markov < ResponseTrigger
 		candidate.split
 	end
 
-	def self.create_seed
-		if @cache.last.text == $bot.nick
-			return chain = @cache.sample.text.split
+	def self.get_matching_candidate(candidate, last_word)
+		(@cache.length).times do 
+			if candidate.include?(last_word)
+				clamp = Random.rand(candidate.length) -1
+				#chain.concat(candidate[candidate.index(last_word)+1..clamp])
+				return candidate[candidate.index(last_word)+1..clamp]
+			end
+			candidate = get_candidate
 		end
-		@cache.last.text.split
+		nil
+	end
+
+
+	def self.create_seed
+		if @cache.last.text.include?($bot.nick)
+			$log.info("Returning last word")
+			return [@cache.last.text.split.last]
+		end
+		[@cache.sample.text.split.last]
 	end
 end

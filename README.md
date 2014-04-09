@@ -6,6 +6,13 @@ Please note: RubyBot is now deprecated. Please upgrade to BotBot :^)
 
 ![botto](botto.png)
 
+##What is BotBot?
+BotBot is the 3rd generation of IRC bots I've written. He is a general utility/humor
+bot for use in any IRC channel. He is currently running on Rizon. He is mainly a tool
+for me to learn and try out new things in Ruby when I don't have a specific project in
+mind. He uses a lot of neat things like metaprogramming, dynamic creation of functions,
+and more!
+
 ##Running locally
 
 BotBot can be run from localhost. Simple clone the repo, edit the ```$bot``` params

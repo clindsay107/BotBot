@@ -90,10 +90,11 @@ class Bot
 
   #hold last N messages in memory, this can be changed but should be kept
   #at a reasonable number, depending on hardware. Also store in DB.
-  def store_message(msg)
+  def cache_message(msg)
     # @conn.prepare("insert_quote", "INSERT INTO quotes (nickname, message, date_added) VALUES ($1, $2)")
     # @conn.exec_prepared("insert_quote", [msg.nickname, msg.text, Time.now])
     return if msg.text == $bot.nick
+    $log.info("Caching #{msg}: #{msg.text}")
     if @msg_cache.length >= 500
       @msg_cache.shift
       @msg_cache << msg
@@ -134,7 +135,7 @@ class Bot
       msg = (msg.split(" ")[1] == "PRIVMSG" ? PrivateMessage.new(msg) : Message.new(msg))
 
       if msg.type == "PRIVMSG"
-        store_message(msg)
+        cache_message(msg)
         fire_triggers(msg)
       end
 
