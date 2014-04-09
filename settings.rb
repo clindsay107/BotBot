@@ -45,6 +45,8 @@ module Settings
 	DEFAULT_TRIGGERS = {
 		loaded_triggers: ResponseTrigger.new("!loaded", Proc.new{$bot.list_loaded_triggers}),
 		load_trigger: ResponseTrigger.new("!load\\s(\\w+)", Proc.new{$bot.load_trigger($bot.last_match[1])}),
-		unload_trigger: ResponseTrigger.new("!unload\\s(\\w+)", Proc.new{$bot.unload_trigger($bot.last_match[1])})
+		unload_trigger: ResponseTrigger.new("!unload\\s(\\w+)", Proc.new{$bot.unload_trigger($bot.last_match[1])}),
+    join_chan: ResponseTrigger.new("!join\\s(\\w+)", Proc.new{$bot.join_chan($bot.last_match[1])}),
+    leave_chan: ResponseTrigger.new("!leave\\s(\\w+)", Proc.new{$bot.leave_chan($bot.last_match[1])})
 	}
 end
