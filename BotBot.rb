@@ -65,8 +65,10 @@ class Bot
   def load_trigger(name, defaults = false)
     name = name.to_sym
     if defaults
+      return if !Settings::DEFAULT_TRIGGERS[name]
       @loaded_triggers[name] = Settings::DEFAULT_TRIGGERS[name]
     else
+      return if !Settings::TRIGGERS[name]
       @loaded_triggers[name] = Settings::TRIGGERS[name]
     end
     $log.info("Loaded #{name}")
