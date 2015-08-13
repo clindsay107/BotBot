@@ -24,7 +24,8 @@ class Bot
     @in_chan = false
 
     log_file = File.open("tmp/debug.log", "a")
-    $log = Logger.new(MultiWriter.new(STDOUT, log_file))
+    # $log = Logger.new(MultiWriter.new(STDOUT, log_file))
+    $log = Logger.new(STDOUT)
     $log.level = (silent ? Logger::WARN : Logger::INFO)
 
     # @conn = PG::Connection.open(dbname: 'botbot')
