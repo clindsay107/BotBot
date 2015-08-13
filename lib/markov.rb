@@ -12,7 +12,8 @@ class Markov < ResponseTrigger
 		end
 
 		if random
-			build_chain(@cache.sample.text)
+			seed = [@cache.sample.text.split.last]
+			build_chain(seed)
 		else
 			build_chain
 		end
