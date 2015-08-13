@@ -20,7 +20,7 @@ module Settings
 	#It must be a positive integer representing seconds. Set to 0 for no delay.
 	#
 
-	DELAY = 2
+	DELAY = 1
 
 	#
 	#This is a collection of triggers that you can dynamically add/remove
@@ -32,7 +32,8 @@ module Settings
 
 	TRIGGERS = {
 		markov: Markov.new(NICKNAME, Proc.new{Markov.markov_response}, true),
-		hi: ResponseTrigger.new("hi", Proc.new{Greeting.build_user_response($bot.msg_cache.last.nickname)}, true)
+		hi: ResponseTrigger.new("hi", Proc.new{Greeting.build_user_response($bot.msg_cache.last.nickname)}, true),
+		random: ResponseTrigger.new("!random", Proc.new{Markov.random_markov}, true)
 	}
 
 	#
@@ -46,7 +47,7 @@ module Settings
 		loaded_triggers: ResponseTrigger.new("!loaded", Proc.new{$bot.list_loaded_triggers}),
 		load_trigger: ResponseTrigger.new("!load\\s(\\w+)", Proc.new{$bot.load_trigger($bot.last_match[1])}),
 		unload_trigger: ResponseTrigger.new("!unload\\s(\\w+)", Proc.new{$bot.unload_trigger($bot.last_match[1])}),
-   	 	join_chan: ResponseTrigger.new("!join\\s(\\w+)", Proc.new{$bot.join_chan($bot.last_match[1])}),
-    	leave_chan: ResponseTrigger.new("!leave\\s(\\w+)", Proc.new{$bot.leave_chan($bot.last_match[1])})
+ 	 	join_chan: ResponseTrigger.new("!join\\s(\\w+)", Proc.new{$bot.join_chan($bot.last_match[1])}),
+		leave_chan: ResponseTrigger.new("!leave\\s(\\w+)", Proc.new{$bot.leave_chan($bot.last_match[1])}),
 	}
 end

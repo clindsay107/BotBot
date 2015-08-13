@@ -97,7 +97,7 @@ class Bot
     # @conn.exec_prepared("insert_quote", [msg.nickname, msg.text, Time.now])
     return if msg.text == $bot.nick
     $log.info("Caching #{msg}: #{msg.text}")
-    if @msg_cache.length >= 500
+    if @msg_cache.length >= 1000
       @msg_cache.shift
       @msg_cache << msg
     else
