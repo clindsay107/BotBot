@@ -96,14 +96,12 @@ class Bot
   def cache_message(msg)
     # @conn.prepare("insert_quote", "INSERT INTO quotes (nickname, message, date_added) VALUES ($1, $2)")
     # @conn.exec_prepared("insert_quote", [msg.nickname, msg.text, Time.now])
-    return if msg.text == $bot.nick
+    return if msg.text == $bot.nick || msg.text.starts_with?("!")
     $log.info("Caching #{msg}: #{msg.text}")
     if @msg_cache.length >= 1000
       @msg_cache.shift
-      @msg_cache << msg
-    else
-      @msg_cache << msg
     end
+      @msg_cache << msg
   end
 
   #Search through all triggers and send response if we get a match

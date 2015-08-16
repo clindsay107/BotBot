@@ -27,50 +27,51 @@ class Markov < ResponseTrigger
 	#build a random markov chain from the cache, using 3-15 string.
 	#try to find ones that match on the last work of the latest link,
 	#otherwise use a random string.
-	def self.build_chain(seed = nil)
+	def build_chain(seed = nil)
 		links = Random.rand(3..15)
 
 		chain = seed || create_seed
 
 		while links > 0 do
-			$log.info("Link size at #{links}")
-			#last_word = chain.last
-			candidate = get_candidate
-
-			# (@cache.length).times do
-			# 	if candidate.include?(last_word)
-			# 		clamp = Random.rand(candidate.length) -1
-			# 		chain.concat(candidate[candidate.index(last_word)+1..clamp])
-			# 		links -= 1
-			# 		break
-			# 	end
-			# 	candidate = get_candidate
-			# end
-			temp = get_matching_candidate(candidate, chain.last)
-
-			if temp
-				chain.concat(temp)
+			if (links == 1)
+				chain.concat(final_word)
 			else
 				candidate = get_candidate
-				clamp = Random.rand(candidate.length) - 1
-				chain.concat(candidate[0..clamp])
+
+				temp = get_matching_candidate(candidate, chain.last)
+
+				if temp
+					chain.concat(temp)
+				else
+					candidate = get_candidate
+					clamp = Random.rand(candidate.length) - 1
+					chain.concat(candidate[0..clamp])
+				end
+				links -= 1
 			end
-			links -= 1
 		end
+
 		$log.info("Chain built, returning #{chain.join(" ")}")
 		chain.join(" ").gsub($bot.nick, "")
 	end
 
-	def self.get_candidate
+	# A string from somewhere in the middle to the end of the sentence
+	def final_word
+		candidate = get_candidate
+		length = candidate.length
+		clamp = Random.rand(length) - 1
+		candidate[length - clamp..length-1]
+	end
+
+	def get_candidate
 		candidate = @cache.sample.text
 		candidate.split
 	end
 
-	def self.get_matching_candidate(candidate, last_word)
-		(@cache.length).times do
+	def get_matching_candidate(candidate, last_word)
+		@cache.length.times do
 			if candidate.include?(last_word)
 				clamp = Random.rand(candidate.length) -1
-				#chain.concat(candidate[candidate.index(last_word)+1..clamp])
 				return candidate[candidate.index(last_word)+1..clamp]
 			end
 			candidate = get_candidate
@@ -78,7 +79,7 @@ class Markov < ResponseTrigger
 		nil
 	end
 
-	def self.create_seed
+	def create_seed
 		if @cache.last.text.include?($bot.nick)
 			$log.info("Returning last word")
 			return [@cache.last.text.split.last]
