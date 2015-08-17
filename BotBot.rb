@@ -2,9 +2,6 @@
 
 require 'socket'
 require 'logger'
-require 'singleton'
-require 'pg'
-require_relative 'settings'
 Dir[File.join(".", "lib/*.rb")].each { |f| require f }
 
 class Bot
@@ -27,13 +24,6 @@ class Bot
     # $log = Logger.new(MultiWriter.new(STDOUT, log_file))
     $log = Logger.new(STDOUT)
     $log.level = (silent ? Logger::WARN : Logger::INFO)
-
-    # @conn = PG::Connection.open(dbname: 'botbot')
-    # @conn.exec("CREATE TABLE quotes (
-    #   id bigserial primary key,
-    #   nickname varchar(25) NOT NULL,
-    #   message text NOT NULL,
-    #   date_added timestamp NOT NULL)")
   end
 
   def say(str)
