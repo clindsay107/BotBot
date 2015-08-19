@@ -15,7 +15,7 @@ class Markov < ResponseTrigger
 		Proc.new { markov_response(@random) }
 	end
 
-	def markov_response(random = false)
+	def markov_response
 		return if $bot.msg_cache.length <= 2
 		if $bot.msg_cache.length < 10
 			msg = $bot.msg_cache.sample.text
@@ -25,11 +25,11 @@ class Markov < ResponseTrigger
 
 		if random
 			seed = [$bot.msg_cache.sample.text.split.last]
-			build_chain(seed)
 		else
-			build_chain()
+			seed = [$bot.msg_cache.last.text.split.last]
 		end
 
+		build_chain(seed)
 	end
 
 	# Build a random markov chain from the cache, using 3-15 string.
@@ -38,7 +38,7 @@ class Markov < ResponseTrigger
 	def build_chain(seed = nil)
 		links = Random.rand(3..15)
 
-		chain = seed || create_seed
+		chain = seed
 
 		while links > 0 do
 			puts ">>> #{links} left"
@@ -69,9 +69,6 @@ class Markov < ResponseTrigger
 		candidate = get_candidate(4)
 		length = candidate.length
 		clamp = Random.rand(length-1)
-		puts ">>> Candidate is #{candidate}"
-		puts ">>> Returning #{length} - #{clamp} .. #{length}"
-		puts ">>> Returning #{candidate[length - clamp..length]}"
 		candidate[length - clamp..length]
 	end
 
@@ -96,10 +93,4 @@ class Markov < ResponseTrigger
 		nil
 	end
 
-	def create_seed
-		if $bot.msg_cache.last.text.include?($bot.nick)
-			return [$bot.msg_cache.last.text.split.last]
-		end
-		[$bot.msg_cache.sample.text.split.last]
-	end
 end
