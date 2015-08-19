@@ -20,7 +20,7 @@ class Greeting < ResponseTrigger
 
 		# If a line in our cache contains any of the canned_responses, add it as candidate
 		$bot.msg_cache.each do |line|
-			if CANNED_RESPONSES.any?{ |r| /(^|\s)#{r}($|\s)/ =~ line }
+			if CANNED_RESPONSES.any?{ |r| /(^|\s)#{r}($|\s)/ =~ line.text }
 				candidates << line.text
 			end
 		end

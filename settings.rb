@@ -12,7 +12,6 @@ module Settings
 	NICKNAME = "HirugaBotto"
 	SERVER = "irc.rizon.net"
 	PORT = 6667
-	# CHAN = "lifting"
 	CHAN = "lifting"
 
 	#
