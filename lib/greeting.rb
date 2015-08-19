@@ -3,29 +3,41 @@ require_relative 'trigger'
 class Greeting < ResponseTrigger
 
 	CANNED_RESPONSES = [
-		"Hi",
-		"Hello",
-		"Hey",
-		"Hola",
-		"Sup",
-		"Yo"
+		"hi",
+		"hello",
+		"hey",
+		"hola",
+		"sup",
+		"yo",
+		"wsup",
+		"ayy",
+		"shut up" # Gotta have 1 mean one in there :^)
 	]
 
-	#pluck a random "greeting" string from cache, or create one
-	def self.build_user_response(user)
+	def initialize(trigger)
+		super(trigger, true)
+	end
+
+	def proc_response
+		Proc.new { build_user_response($bot.msg_cache.last.nickname) }
+	end
+
+	# Pluck a random "greeting" string from cache, or create one
+	def build_user_response(user)
 		candidates = []
 
+		# If a line in our cache contains any of the canned_responses, add it as candidate
 		$bot.msg_cache.each do |line|
-			line = line.text
-			if CANNED_RESPONSES.any?{ |r| line.downcase[r.downcase] }
-				candidates << line
+			if CANNED_RESPONSES.any?{ |r| line.text.split.include?(r) }
+				candidates << line.text
 			end
 		end
-		if !candidates.empty?
-			return candidates.sample
+
+		if candidates.empty?
+			return "#{CANNED_RESPONSES.sample} #{user}"
 		end
 
-		"#{CANNED_RESPONSES.sample} #{user}"
+		candidates.sample
 	end
 
 end

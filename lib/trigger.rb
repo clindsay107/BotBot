@@ -1,66 +1,55 @@
-class Trigger
+class ResponseTrigger
+
+  # Here I want to add the response to a response array (in the DB) if a
+  # Trigger already exists. Also add the funcitonality to remove a specific
+  # Response for a trigger, unless it is the last remaining response for that
+  # Trigger, in which case remove the trigger from the DB entirely
+
+  attr_reader :response, :matcher, :implicit
+
+  # `implicit` value means a command that does not require a !bang and can be
+  # matched anywhere in the string, not only at the beginning
+  def initialize(trigger, implicit = false)
+    @implicit = implicit
+    @matcher = build_matcher(trigger)
+    @response = proc_response()
+  end
 
   def name
     "trigger.#{self.class.name}"
   end
 
-  def self.find_loadable(str)
-    #
+  # A method that must be overridden by all inheriting subclasses. It should
+  # always return a Proc of a response (usually a method call) so that it can
+  # be called at a later time in Irc#fire_triggers
+  def proc_response
+    raise 'Subclasses MUST override to_proc method!'
   end
 
-  def self.find_unloadble(str)
-    #
-  end
-
-end
-
-#An object that will respond to a given trigger regular expression
-#and reply with a string
-
-class ResponseTrigger < Trigger
-
-  #here I want to add the response to a response array (in the DB) if a
-  #trigger already exists. Also add the funcitonality to remove a specific
-  #response for a trigger, unless it is the last remaining response for that
-  #trigger, in which case remove the trigger from the DB entirely
-
-  attr_reader :response, :matcher, :implicit
-
-  def initialize(trigger, response, implicit = false)
-    build_matcher(trigger)
-    @response = response
-    @implicit = implicit
-  end
-
-  #When building a matcher from a string, you MUST double escape backward slashes
-  #or they will be ignored!
+  # When building a matcher from a string, you MUST double escape backward slashes
+  # or they will be ignored!
   def build_matcher(trigger)
     if trigger[0] == "/" && trigger[-1] == "/"
       trigger = trigger[1..-2]
-      @matcher = /#{trigger}/
-    else
-      @matcher = (self.implicit ? /(^|\s)#{trigger}($|\s)/ : /^#{trigger}($|\s)/)
     end
+    @implicit ? /(^|\s)#{trigger}($|\s)/ : /^#{trigger}($|\s)/
   end
 
-  #if we want to use a method as our response and trigger it at a later time,
-  #procify it on creation and then call the proc, sending that method's return
-  #value as our response
-  def send_response
-    if self.response.class.name == "Proc"
-      return self.response.call
+  # If response is a proc, then call it. Otherwise it is just a vanilla string
+  # and we can return it as-is
+  def respond
+    if @response.class.name == "Proc"
+      return @response.call
     end
-    self.response
+    @response
   end
 
-  #BotBot uses ! syntax. Feel free to change this to anything you wish.
+  # BotBot uses ! syntax. Feel free to change this to anything you wish.
   def matched?(str)
-    # puts ">>> #{self.matcher.source}"
-    # puts ">>> #{str}"
-    return false if (!self.implicit && str[0] != "!")
+    return false if (!@implicit && str[0] != "!")
     if (self.matcher =~ str) != nil
       $bot.last_match = $~
-      $log.info("/#{self.matcher.source}/ matched #{str}")
+      $log.info("/#{@matcher.source}/ matched #{str}")
       return true
     end
     false

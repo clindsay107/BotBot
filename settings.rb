@@ -6,13 +6,20 @@ module Settings
 	# These are some default settings for BotBot. Feel free to change
 	# his nickname, irc server address, etc. Port number is 6667 by default,
 	# but some IRC servers may use something else. SSL is not implemented yet
-	# but support is coming soon! Note: channel name does not need # prefix
+	# but support is coming soon! Note: channel name does not need # prefix.
 	#
 
-	NICKNAME = "HirugaBotto"
+	NICKNAME = "HirugaBotto1"
 	SERVER = "irc.rizon.net"
 	PORT = 6667
-	CHAN = "lifting"
+	# CHAN = "lifting"
+	CHAN = "bptest"
+
+	#
+	# This is an array containing nicknames of users that can fire off 'admin' commands
+	#
+
+	ADMINS = ["BradPitt"]
 
 	#
 	# This is the minimum amount of time that must pass before another response
@@ -40,9 +47,10 @@ module Settings
 	#
 
 	TRIGGERS = {
-		markov: Markov.new(NICKNAME, Proc.new{Markov.markov_response}, true),
-		hi: ResponseTrigger.new("hi", Proc.new{Greeting.build_user_response($bot.msg_cache.last.nickname)}, true),
-		random: ResponseTrigger.new("!random", Proc.new{Markov.random_markov}, true)
+		hi: Greeting.new("hi|hey|sup")
+		# hi: ResponseTrigger.new("hi", Proc.new{Greeting.build_user_response($bot.msg_cache.last.nickname)}, true),
+		# markov: Markov.new(NICKNAME, Markov.new.markov_response, true),
+		# random: ResponseTrigger.new("!random", Proc.new{Markov.new.random_markov}, true)
 	}
 
 	#
@@ -53,10 +61,10 @@ module Settings
 	#
 
 	DEFAULT_TRIGGERS = {
-		loaded_triggers: ResponseTrigger.new("!loaded", Proc.new{$bot.list_loaded_triggers}),
-		load_trigger: ResponseTrigger.new("!load\\s(\\w+)", Proc.new{$bot.load_trigger($bot.last_match[1])}),
-		unload_trigger: ResponseTrigger.new("!unload\\s(\\w+)", Proc.new{$bot.unload_trigger($bot.last_match[1])}),
- 	 	join_chan: ResponseTrigger.new("!join\\s(\\w+)", Proc.new{$bot.join_chan($bot.last_match[1])}),
-		leave_chan: ResponseTrigger.new("!leave\\s(\\w+)", Proc.new{$bot.leave_chan($bot.last_match[1])}),
+		# loaded_triggers: ResponseTrigger.new("!loaded", Proc.new{$bot.list_loaded_triggers}),
+		# load_trigger: ResponseTrigger.new("!load\\s(\\w+)", Proc.new{$bot.load_trigger($bot.last_match[1])}),
+		# unload_trigger: ResponseTrigger.new("!unload\\s(\\w+)", Proc.new{$bot.unload_trigger($bot.last_match[1])}),
+		#  	join_chan: ResponseTrigger.new("!join\\s(\\w+)", Proc.new{$bot.join_chan($bot.last_match[1])}),
+		# leave_chan: ResponseTrigger.new("!leave\\s(\\w+)", Proc.new{$bot.leave_chan($bot.last_match[1])}),
 	}
 end

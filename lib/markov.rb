@@ -2,25 +2,28 @@ require_relative 'trigger'
 
 class Markov < ResponseTrigger
 
-	def self.markov_response(random = false)
-		@cache = $bot.msg_cache
-		return if @cache.length <= 2
-		if @cache.length < 10
-			msg = @cache.sample.text
+	def initialize(random)
+		#
+	end
+
+	def markov_response(random = false)
+		return if $bot.msg_cache.length <= 2
+		if $bot.msg_cache.length < 10
+			msg = $bot.msg_cache.sample.text
 			$log.info("Cache size under 10, returning #{msg}")
 			return msg
 		end
 
 		if random
-			seed = [@cache.sample.text.split.last]
+			seed = [$bot.msg_cache.sample.text.split.last]
 			build_chain(seed)
 		else
-			build_chain
+			build_chain()
 		end
 
 	end
 
-	def self.random_markov
+	def random_markov
 		markov_response(true)
 	end
 
@@ -64,12 +67,12 @@ class Markov < ResponseTrigger
 	end
 
 	def get_candidate
-		candidate = @cache.sample.text
+		candidate = $bot.msg_cache.sample.text
 		candidate.split
 	end
 
 	def get_matching_candidate(candidate, last_word)
-		@cache.length.times do
+		$bot.msg_cache.length.times do
 			if candidate.include?(last_word)
 				clamp = Random.rand(candidate.length) -1
 				return candidate[candidate.index(last_word)+1..clamp]
@@ -80,10 +83,10 @@ class Markov < ResponseTrigger
 	end
 
 	def create_seed
-		if @cache.last.text.include?($bot.nick)
+		if $bot.msg_cache.last.text.include?($bot.nick)
 			$log.info("Returning last word")
-			return [@cache.last.text.split.last]
+			return [$bot.msg_cache.last.text.split.last]
 		end
-		[@cache.sample.text.split.last]
+		[$bot.msg_cache.sample.text.split.last]
 	end
 end

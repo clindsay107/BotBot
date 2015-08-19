@@ -1,5 +1,33 @@
-CREATE TABLE IF NOT EXISTS quotes (
-  id bigserial primary key,
+CREATE TABLE IF NOT EXISTS user_quotes (
+  id bigserial PRIMARY KEY,
   nickname varchar(25) NOT NULL,
   message text NOT NULL,
-  date_added timestamp NOT NULL);
+  date_added timestamp NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS admins (
+  id bigserial PRIMARY KEY,
+  nickname VARCHAR(225) NOT NULL,
+  hostname VARCHAR(225),
+  date_added timestamp NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS banned_users (
+  id bigserial PRIMARY KEY,
+  nickname VARCHAR(225) NOT NULL,
+  hostname VARCHAR(225),
+  date_added timestamp NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS hi_quotes (
+  id bigserial PRIMARY KEY,
+  quote text NOT NULL,
+  date_added timestamp NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS uppercase_quotes (
+  id bigserial PRIMARY KEY,
+  quote text NOT NULL,
+  nickname VARCHAR(225) NOT NULL,
+  date_added timestamp NOT NULL
+);
