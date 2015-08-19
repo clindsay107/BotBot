@@ -32,7 +32,7 @@ class ResponseTrigger
     if trigger[0] == "/" && trigger[-1] == "/"
       trigger = trigger[1..-2]
     end
-    @implicit ? /(^|\s)#{trigger}($|\s)/ : /^#{trigger}($|\s)/
+      @implicit ? /(^|\s)#{trigger}($|\s)/ : /^#{trigger}($|\s)/
   end
 
   # If response is a proc, then call it. Otherwise it is just a vanilla string

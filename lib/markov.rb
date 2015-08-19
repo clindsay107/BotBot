@@ -2,8 +2,17 @@ require_relative 'trigger'
 
 class Markov < ResponseTrigger
 
-	def initialize(random)
-		#
+	def initialize(trigger, random)
+		@random = random
+		if random
+			super(trigger, true) # It is an implicit !bang command
+		else
+			super(trigger, false)
+		end
+	end
+
+	def proc_response
+		Proc.new { markov_response(@random) }
 	end
 
 	def markov_response(random = false)
@@ -23,21 +32,19 @@ class Markov < ResponseTrigger
 
 	end
 
-	def random_markov
-		markov_response(true)
-	end
-
-	#build a random markov chain from the cache, using 3-15 string.
-	#try to find ones that match on the last work of the latest link,
-	#otherwise use a random string.
+	# Build a random markov chain from the cache, using 3-15 string.
+	# Try to find ones that match on the last work of the latest link,
+	# Otherwise use a random string.
 	def build_chain(seed = nil)
 		links = Random.rand(3..15)
 
 		chain = seed || create_seed
 
 		while links > 0 do
+			puts ">>> #{links} left"
 			if (links == 1)
-				chain.concat(final_word)
+				chain.concat(final_word())
+				puts ">>> Added final word and created #{chain}"
 			else
 				candidate = get_candidate
 
@@ -50,8 +57,8 @@ class Markov < ResponseTrigger
 					clamp = Random.rand(candidate.length) - 1
 					chain.concat(candidate[0..clamp])
 				end
-				links -= 1
 			end
+			links -= 1
 		end
 
 		$log.info("Chain built, returning #{chain.join(" ")}")
@@ -60,14 +67,22 @@ class Markov < ResponseTrigger
 
 	# A string from somewhere in the middle to the end of the sentence
 	def final_word
-		candidate = get_candidate
+		candidate = get_candidate(4)
 		length = candidate.length
-		clamp = Random.rand(length) - 1
-		candidate[length - clamp..length-1]
+		clamp = Random.rand(length-1)
+		puts ">>> Candidate is #{candidate}"
+		puts ">>> Returning #{length} - #{clamp} .. #{length}"
+		puts ">>> Returning #{candidate[length - clamp..length]}"
+		candidate[length - clamp..length]
 	end
 
-	def get_candidate
+	# Recursively search for a candidate of matching minimum length
+	def get_candidate(min_length = 1)
 		candidate = $bot.msg_cache.sample.text
+
+		if candidate.split.length < min_length
+			return get_candidate(min_length)
+		end
 		candidate.split
 	end
 
@@ -84,7 +99,6 @@ class Markov < ResponseTrigger
 
 	def create_seed
 		if $bot.msg_cache.last.text.include?($bot.nick)
-			$log.info("Returning last word")
 			return [$bot.msg_cache.last.text.split.last]
 		end
 		[$bot.msg_cache.sample.text.split.last]

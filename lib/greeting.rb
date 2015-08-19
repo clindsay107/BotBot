@@ -3,15 +3,7 @@ require_relative 'trigger'
 class Greeting < ResponseTrigger
 
 	CANNED_RESPONSES = [
-		"hi",
-		"hello",
-		"hey",
-		"hola",
-		"sup",
-		"yo",
-		"wsup",
-		"ayy",
-		"shut up" # Gotta have 1 mean one in there :^)
+		"hi", "hello", "hey", "hola", "sup", "yo", "wsup", "ayy", "shut up"
 	]
 
 	def initialize(trigger)

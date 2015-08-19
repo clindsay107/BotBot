@@ -9,11 +9,11 @@ module Settings
 	# but support is coming soon! Note: channel name does not need # prefix.
 	#
 
-	NICKNAME = "HirugaBotto1"
+	NICKNAME = "HirugaBotto"
 	SERVER = "irc.rizon.net"
 	PORT = 6667
 	# CHAN = "lifting"
-	CHAN = "bptest"
+	CHAN = "lifting"
 
 	#
 	# This is an array containing nicknames of users that can fire off 'admin' commands
@@ -47,10 +47,9 @@ module Settings
 	#
 
 	TRIGGERS = {
-		hi: Greeting.new("hi|hey|sup")
-		# hi: ResponseTrigger.new("hi", Proc.new{Greeting.build_user_response($bot.msg_cache.last.nickname)}, true),
-		# markov: Markov.new(NICKNAME, Markov.new.markov_response, true),
-		# random: ResponseTrigger.new("!random", Proc.new{Markov.new.random_markov}, true)
+		hi: Greeting.new("hi|hey|sup"),
+		markov: Markov.new(NICKNAME, false),
+		random: Markov.new("!random", true)
 	}
 
 	#
