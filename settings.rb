@@ -12,7 +12,7 @@ module Settings
 	NICKNAME = "HirugaBotto"
 	SERVER = "irc.rizon.net"
 	PORT = 6667
-	CHAN = "bptest"
+	CHAN = "lifting"
 
 	#
 	# This is an array containing nicknames of users that can fire off 'admin' commands
