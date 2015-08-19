@@ -12,7 +12,7 @@ class Markov < ResponseTrigger
 	end
 
 	def proc_response
-		Proc.new { markov_response(@random) }
+		Proc.new { markov_response() }
 	end
 
 	def markov_response
@@ -23,7 +23,7 @@ class Markov < ResponseTrigger
 			return msg
 		end
 
-		if random
+		if @random
 			seed = [$bot.msg_cache.sample.text.split.last]
 		else
 			seed = [$bot.msg_cache.last.text.split.last]

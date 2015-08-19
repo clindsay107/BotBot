@@ -32,7 +32,8 @@ class ResponseTrigger
     if trigger[0] == "/" && trigger[-1] == "/"
       trigger = trigger[1..-2]
     end
-      @implicit ? /(^|\s)#{trigger}($|\s)/ : /^#{trigger}($|\s)/
+
+    @implicit ? /(^|\s)#{trigger}($|\s)/ : /^\!#{trigger}($|\s)/
   end
 
   # If response is a proc, then call it. Otherwise it is just a vanilla string
@@ -41,12 +42,12 @@ class ResponseTrigger
     if @response.class.name == "Proc"
       return @response.call
     end
+
     @response
   end
 
   # BotBot uses ! syntax. Feel free to change this to anything you wish.
   def matched?(str)
-    return false if (!@implicit && str[0] != "!")
     if (self.matcher =~ str) != nil
       $bot.last_match = $~
       $log.info("/#{@matcher.source}/ matched #{str}")

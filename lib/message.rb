@@ -42,7 +42,7 @@ class PrivateMessage < Message
   end
 
   def stringify
-    self.text
+    @text
   end
 
 end
