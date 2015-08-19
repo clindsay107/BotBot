@@ -7,7 +7,7 @@ class Greeting < ResponseTrigger
 	]
 
 	def initialize(trigger)
-		super(trigger, true)
+		super(trigger, false)
 	end
 
 	def proc_response
