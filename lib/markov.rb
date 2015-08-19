@@ -44,7 +44,6 @@ class Markov < ResponseTrigger
 			puts ">>> #{links} left"
 			if (links == 1)
 				chain.concat(final_word())
-				puts ">>> Added final word and created #{chain}"
 			else
 				candidate = get_candidate
 
