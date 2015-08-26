@@ -12,8 +12,7 @@ class Bot
     init_bot_logger()
   end
 
-  #Open a TCPSocket and connect, joining the channel when appropriate.
-  #Turn on verbose logging if declared in init (helpful for debugging)
+  # Open a TCPSocket and connect, joining the channel when appropriate.
   def run
     load_triggers()
     @socket = TCPSocket.open(@server, @port)
