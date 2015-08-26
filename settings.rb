@@ -15,6 +15,14 @@ module Settings
 	CHAN = "lifting"
 
 	#
+	# Log file settings as well as log rotate (this can be `daily` `weekly` or `monthly`)
+	# and by defualt is set to `monthly`
+	#
+
+	LOG_ROTATE = "monthly"
+	LOG_FILE = "../tmp/debug.log"
+
+	#
 	# This is an array containing nicknames of users that can fire off 'admin' commands
 	#
 
