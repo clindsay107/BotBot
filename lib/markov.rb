@@ -9,10 +9,27 @@ class Markov < ResponseTrigger
 		else
 			super(trigger, false)
 		end
+
+		@dictionary = {}
 	end
 
 	def proc_response
 		Proc.new { markov_response() }
+	end
+
+	def analyze(string)
+		input_array = string.downcase().split()
+		# Insert 'nil' after all words that complete a sentence: .?!
+		# input_array.flat_map { |w| w =~ /[?\.!]$/ ? [w, 'nil'] : w }
+		input_array.each_with_index do |word, idx|
+			if @dictionary[word].nil?
+				next if input_array[idx+1].nil?
+				@dictionary[word] = [input_array[idx+1]]
+			else
+				# This will add multiples, so frequency is taking into account
+				@dictionary[word] << input_array[idx+1]
+			end
+		end
 	end
 
 	def markov_response
