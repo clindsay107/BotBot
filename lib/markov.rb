@@ -31,7 +31,7 @@ class Markov < ResponseTrigger
 		if @random
 			build_response()
 		else
-			new_markov!($bot.msg_cache.last.text.split.last)
+			build_response($bot.msg_cache.last.text.split.last)
 		end
 	end
 

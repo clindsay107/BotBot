@@ -1,14 +1,16 @@
 #!/usr/bin/env ruby
 
 require 'singleton'
+require 'optparse'
 Dir[File.join(".", "lib/*.rb")].each { |f| require f }
 
 class Bot
   include BotLogger, Irc, ShitList
 
-  def initialize()
+  def initialize(chan = nil)
+    chan = ARGV[0]
     # @db = Database.new
-    init_irc()
+    init_irc(chan)
     init_bot_logger()
   end
 

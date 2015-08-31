@@ -7,11 +7,11 @@ module Irc
   attr_accessor :socket, :loaded_triggers, :last_match
 
     # Have an explicit initialize method, since calling super() is vague
-    def init_irc(silent = false)
+    def init_irc(silent = false, chan)
       @nick = Settings::NICKNAME
       @server = Settings::SERVER
       @port = Settings::PORT
-      @chan = Settings::CHAN
+      @chan = chan || Settings::CHAN
       @last_resp = Time.now
       @loaded_triggers = {}
       @msg_cache = []

@@ -54,9 +54,9 @@ module Settings
 	#
 
 	TRIGGERS = {
-		hi: Greeting.new("(hi)"),
-		markov: Markov.new(NICKNAME, false),
-		random: Markov.new("!random", true),
+		hi: Greeting.new("(^hi)"),
+		markov: Markov.new(NICKNAME),
+		random: Markov.new("random", true)
 	}
 
 	#
