@@ -2,7 +2,6 @@ require 'logger'
 require_relative '../settings.rb'
 
 module BotLogger
-  include Settings
 
   def init_bot_logger(silent = false, dev = false)
     log_file = File.open(Settings::LOG_FILE, File::WRONLY | File::APPEND)

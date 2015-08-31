@@ -2,7 +2,6 @@ require 'socket'
 require_relative '../settings.rb'
 
 module Irc
-  # include Settings
 
   attr_reader :nick, :server, :port, :chan, :verbose, :msg_cache
   attr_accessor :socket, :loaded_triggers, :last_match
