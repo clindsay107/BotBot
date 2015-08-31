@@ -20,7 +20,7 @@ module Settings
 	#
 
 	LOG_ROTATE = "monthly"
-	LOG_FILE = "../tmp/debug.log"
+	LOG_FILE = "./tmp/debug.log"
 
 	#
 	# This is an array containing nicknames of users that can fire off 'admin' commands

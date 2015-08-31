@@ -27,6 +27,7 @@ class Bot
 
       if msg.class == PrivateMessage
         store_message(msg)
+        Markov.analyze(msg.text)
         fire_triggers(msg) unless is_banned?(msg.nickname)
       else
         respond_to_server(msg)
