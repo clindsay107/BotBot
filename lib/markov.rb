@@ -4,7 +4,7 @@ class Markov < ResponseTrigger
 
 	attr_accessor :dictionary
 
-	def initialize(trigger, random)
+	def initialize(trigger, random = false)
 		@random = random
 		@@dictionary = Hash.new([])
 
