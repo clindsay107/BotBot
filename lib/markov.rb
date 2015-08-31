@@ -7,7 +7,8 @@ class Markov < ResponseTrigger
 	def initialize(trigger, random)
 		@random = random
 		@@dictionary = Hash.new([])
-		super(trigger, random)
+
+		@random ? super(trigger, false) : super(trigger, true)
 	end
 
 	def proc_response
