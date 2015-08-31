@@ -20,7 +20,7 @@ class Markov < ResponseTrigger
 
 		input_array.each_with_index do |word, idx|
 			next_word = input_array[idx+1]
-			unless next_word.nil? || @@dictionary[word].include?(next_word)
+			unless next_word.nil? # || @@dictionary[word].include?(next_word)
 				@@dictionary[word] << next_word
 			end
 		end
