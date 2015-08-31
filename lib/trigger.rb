@@ -46,7 +46,6 @@ class ResponseTrigger
     @response
   end
 
-  # BotBot uses ! syntax. Feel free to change this to anything you wish.
   def matched?(str)
     if (self.matcher =~ str) != nil
       $bot.last_match = $~

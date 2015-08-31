@@ -79,7 +79,6 @@ module Irc
         @loaded_triggers[name] = Settings::TRIGGERS[name]
       end
       $log.info("Loaded #{name}")
-      "#{name} successfully loaded!"
     end
 
     def unload_trigger(name)
@@ -87,14 +86,13 @@ module Irc
       return if @loaded_triggers[name].nil?
       @loaded_triggers.delete(name)
       $log.info("Unloaded #{name}")
-      "#{name} successfully unloaded!"
     end
 
     def list_loaded_triggers
       return if @loaded_triggers.empty?
       loaded_list = ""
       @loaded_triggers.each_key { |t| loaded_list += "#{t.to_s.capitalize}, " }
-      "Currently loaded triggers: #{loaded_list[0..-3]}"
+      $log.info("Currently loaded triggers: #{loaded_list[0..-3]}")
     end
 
     # Hold last N messages in memory, this can be changed but should be kept

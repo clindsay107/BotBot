@@ -11,7 +11,7 @@ class Markov < ResponseTrigger
 	end
 
 	def proc_response
-		Proc.new { new_markov(seed) }
+		Proc.new { markov_response() }
 	end
 
 	def self.analyze(string)
@@ -28,7 +28,7 @@ class Markov < ResponseTrigger
 
 	def markov_response()
 		if @random
-			new_markov!
+			build_response()
 		else
 			new_markov!($bot.msg_cache.last.text.split.last)
 		end
@@ -36,7 +36,7 @@ class Markov < ResponseTrigger
 
 	private
 
-	def markov_response!(seed = nil)
+	def build_response(seed = nil)
 	   length = Random.rand(3..8)
 		 chain = (seed.nil? ? [@@dictionary.keys.sample] : [seed.downcase])
 		 $log.info("Starting markov chain with #{chain}")
