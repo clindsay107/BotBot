@@ -9,7 +9,6 @@ class Bot
 
   def initialize(chan = nil)
     chan = ARGV[0]
-    # @db = Database.new
     init_irc(chan)
     init_bot_logger()
   end

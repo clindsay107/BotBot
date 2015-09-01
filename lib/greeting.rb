@@ -29,7 +29,7 @@ class Greeting < ResponseTrigger
 			return "#{CANNED_RESPONSES.sample} #{user}"
 		end
 
-		"#{candidates.sample} #{user}"
+		candidates.sample
 	end
 
 end

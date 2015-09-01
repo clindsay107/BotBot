@@ -7,7 +7,6 @@ class Markov < ResponseTrigger
 	def initialize(trigger, random = false)
 		@random = random
 		@@dictionary = {}
-
 		@random ? super(trigger, false) : super(trigger, true)
 	end
 
@@ -34,7 +33,7 @@ class Markov < ResponseTrigger
 		if @random
 			build_response()
 		else
-			build_response($bot.msg_cache.last.text.split.last)
+			build_response($bot.msg_cache.last.text.split.sample)
 		end
 	end
 

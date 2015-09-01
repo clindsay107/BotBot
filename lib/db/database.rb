@@ -12,7 +12,7 @@ class Database
   end
 
   def store_quote(quote)
-
+    #
   end
 
   def find_by_username(nickname)
@@ -25,7 +25,6 @@ class Database
   def setup()
     file = File.open('./schema.txt')
     schema = file.read
-
     @conn.execute(schema)
   end
 

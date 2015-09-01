@@ -65,7 +65,7 @@ module Irc
     end
 
     def load_triggers
-      Settings::DEFAULT_TRIGGERS.each_key{ |k| load_trigger(k, true) }
+      # Settings::DEFAULT_TRIGGERS.each_key{ |k| load_trigger(k, true) }
       Settings::TRIGGERS.each_key{ |k| load_trigger(k) }
     end
 
@@ -82,17 +82,11 @@ module Irc
     end
 
     def unload_trigger(name)
-      name = name.to_sym
-      return if @loaded_triggers[name].nil?
-      @loaded_triggers.delete(name)
-      $log.info("Unloaded #{name}")
+      #
     end
 
     def list_loaded_triggers
-      return if @loaded_triggers.empty?
-      loaded_list = ""
-      @loaded_triggers.each_key { |t| loaded_list += "#{t.to_s.capitalize}, " }
-      $log.info("Currently loaded triggers: #{loaded_list[0..-3]}")
+      #
     end
 
     # Hold last N messages in memory, this can be changed but should be kept
