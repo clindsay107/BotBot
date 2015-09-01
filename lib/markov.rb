@@ -6,7 +6,7 @@ class Markov < ResponseTrigger
 
 	def initialize(trigger, random = false)
 		@random = random
-		@@dictionary = Hash.new([])
+		@@dictionary = {}
 
 		@random ? super(trigger, false) : super(trigger, true)
 	end
@@ -16,11 +16,14 @@ class Markov < ResponseTrigger
 	end
 
 	def self.analyze(string)
-		input_array = string.downcase().split()
+		input_array = string.split()
 
 		input_array.each_with_index do |word, idx|
 			next_word = input_array[idx+1]
-			unless next_word.nil? # || @@dictionary[word].include?(next_word)
+			next if next_word.nil?
+			if @@dictionary[word].nil?
+			    @@dictionary[word] = [next_word]
+			else
 				@@dictionary[word] << next_word
 			end
 		end
@@ -43,7 +46,7 @@ class Markov < ResponseTrigger
 		 $log.info("Starting markov chain with #{chain}")
 
 	    while chain.length < length do
-					$log.info("Chain is #{chain} and length is #{length}")
+					$log.info("Chain is #{chain}")
 	        if @@dictionary[chain.last].nil?
 						$log.info("Sampling random word for markov chain (no non-nil candidate key found)")
 	            chain << @@dictionary.keys.sample
