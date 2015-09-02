@@ -36,8 +36,8 @@ class Database
       $log.warn("Cannot store nil value from supplied array #{values}")
       return
     end
-    statement = "INSERT INTO user_quotes VALUES ($1, $2, $3, $4)"
-    @@conn.execute(statement, values)
+    @@conn.prepare('statement', 'INSERT INTO user_quotes VALUES ($1, $2, $3, $4)')
+    @@conn.exec_prepared('statement', values)
   end
 
   def store!()
