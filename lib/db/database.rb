@@ -30,7 +30,7 @@ class Database
     @@conn.execute(statement, [nickname])
   end
 
-  def store_quote!(nickname, hostname, quote, time)
+  def self.store_quote!(nickname, hostname, quote, time)
     values = [nickname, hostname, quote, time]
     values.any? { |v| v.nil? raise "Cannot insert null value" }
     statement = "INSERT INTO user_quotes VALUES ($1, $2, $3, $4)"
