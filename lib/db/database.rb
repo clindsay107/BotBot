@@ -32,7 +32,10 @@ class Database
 
   def self.store_quote!(nickname, hostname, quote, time)
     values = [nickname, hostname, quote, time]
-    values.any? { |v| v.nil? return }
+    if values.include?(nil)
+      $log.warn("Cannot store nil value from supplied array #{values}")
+      return
+    end
     statement = "INSERT INTO user_quotes VALUES ($1, $2, $3, $4)"
     @@conn.execute(statment, values)
   end
