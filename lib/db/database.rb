@@ -12,8 +12,7 @@ class Database
 
   def self.store_quote(message)
     nickname = message.nickname
-    hostname = message.hostname
-    quote = message.text
+    text = message.text
     time = Time.now()
     store_quote!(nickname, hostname, quote, time)
   end
@@ -30,13 +29,13 @@ class Database
     @@conn.execute(statement, [nickname])
   end
 
-  def self.store_quote!(nickname, hostname, quote, time)
-    values = [nickname, hostname, quote, time]
+  def self.store_quote!(nickname, text, time)
+    values = [nickname, text, time]
     if values.include?(nil)
       $log.warn("Cannot store nil value from supplied array #{values}")
       return
     end
-    @@conn.prepare('statement', 'INSERT INTO user_quotes VALUES ($1, $2, $3, $4)')
+    @@conn.prepare('statement', 'INSERT INTO user_quotes (nickname, message, timestamp) VALUES ($1, $2, $3)')
     @@conn.exec_prepared('statement', values)
   end
 
