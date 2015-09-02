@@ -37,7 +37,7 @@ class Database
       return
     end
     statement = "INSERT INTO user_quotes VALUES ($1, $2, $3, $4)"
-    @@conn.execute(statment, values)
+    @@conn.execute(statement, values)
   end
 
   def store!()
