@@ -14,7 +14,7 @@ class Database
     nickname = message.nickname
     text = message.text
     time = Time.now()
-    store_quote!(nickname, hostname, quote, time)
+    store_quote!(nickname, quote, time)
   end
 
   def self.find_quote_by_username(nickname)
