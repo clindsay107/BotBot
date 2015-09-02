@@ -2,6 +2,7 @@
 
 require 'singleton'
 require 'optparse'
+require_relative './lib/db/database.rb'
 Dir[File.join(".", "lib/*.rb")].each { |f| require f }
 
 class Bot
@@ -11,6 +12,7 @@ class Bot
     chan = ARGV[0]
     init_irc(chan)
     init_bot_logger()
+    Database.init_db()
   end
 
   # Open a TCPSocket and connect, joining the channel when appropriate.
@@ -28,6 +30,8 @@ class Bot
 
       if msg.class == PrivateMessage
         store_message(msg)
+        # temporary
+        Database.store_quote(msg)
         Markov.analyze(msg.text)
         fire_triggers(msg) unless is_banned?(msg.nickname)
       else

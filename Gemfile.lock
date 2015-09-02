@@ -1,8 +1,9 @@
 GEM
   remote: https://rubygems.org/
   specs:
-    pg (0.17.1)
-    pg (0.17.1-x86-mingw32)
+    pg (0.18.2)
+    pg (0.18.2-x86-mingw32)
+    redis (3.2.1)
 
 PLATFORMS
   ruby
@@ -10,3 +11,4 @@ PLATFORMS
 
 DEPENDENCIES
   pg
+  redis
