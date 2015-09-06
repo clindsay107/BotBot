@@ -15,7 +15,7 @@ and more!
 
 ##Running locally
 
-BotBot can be run from localhost. Simple clone the repo, edit the ```$bot``` params
+BotBot can be run from localhost. Simply clone the repo, edit the ```$bot``` params
 (this will eventually be a config file...). Provide him with an irc server address,
 port number (typically 6667, no SSL support yet!), a channel name and a nickname.
 Start him up in your terminal via `ruby BotBot.rb` and he will join your channel!
